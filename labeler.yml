@@ -1,0 +1,30 @@
+# Labels applied when PR touches matching paths (gh-labeler)
+# Ensure these labels exist in the repo or use create-missing-labels: 'true' in the workflow
+
+go:
+  - '**/*.go'
+  - 'go.mod'
+  - 'go.sum'
+
+helm:
+  - 'helm/**/*'
+
+config:
+  - 'config/**/*'
+
+ci:
+  - '.github/workflows/**/*'
+  - '.github/dependabot.yml'
+  - '.github/CODEOWNERS'
+
+documentation:
+  - '*.md'
+  - 'docs/**/*'
+
+docker:
+  - 'Dockerfile'
+  - 'Dockerfile.*'
+
+dependencies:
+  - 'go.mod'
+  - 'go.sum'
