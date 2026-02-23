@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-taint-controller-config
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: node-taint-controller
+data:
+  # Minutes a node must remain NotReady before the out-of-service taint is applied.
+  unhealthy-delay-minutes: "5"
+  # Minutes a node must remain Ready after being tainted before the taint is removed.
+  recovery-delay-minutes: "10"
+  # If the percentage of NotReady watched nodes exceeds this value the controller
+  # stops applying taints to prevent cascading failures.  Set to "100" to disable.
+  max-unhealthy-percentage: "33"
+  # Optional label selector to restrict which nodes are watched.
+  # Leave empty to watch all nodes.  Example: "taint-controller=enabled"
+  node-label-selector: ""

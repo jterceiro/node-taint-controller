@@ -1,0 +1,20 @@
+apiVersion: v2
+name: node-taint-controller
+description: >
+  A Kubernetes controller that handles Non-Graceful Node Shutdowns by managing
+  the node.kubernetes.io/out-of-service:NoExecute taint.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/jterceiro/node-taint-controller
+sources:
+  - https://github.com/jterceiro/node-taint-controller
+keywords:
+  - node
+  - taint
+  - controller
+  - kubernetes
+  - non-graceful-shutdown
+maintainers:
+  - name: jterceiro
+    url: https://github.com/jterceiro

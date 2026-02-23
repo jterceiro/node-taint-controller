@@ -1,0 +1,102 @@
+# Default values for node-taint-controller.
+
+# Number of controller replicas. Leader election is enabled by default so
+# running more than one replica is safe.
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jterceiro/node-taint-controller
+  # Overrides the image tag; defaults to the chart's appVersion.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+# Namespace where the controller (and its ConfigMap / ServiceAccount) are
+# deployed.  ClusterRole and ClusterRoleBinding are cluster-scoped.
+namespaceOverride: ""
+
+serviceAccount:
+  # Create a dedicated ServiceAccount.
+  create: true
+  # Name of the ServiceAccount. Defaults to the chart fullname.
+  name: ""
+  annotations: {}
+
+# Controller configuration – these values are written into the ConfigMap that
+# the controller reads on every reconcile loop (changes take effect without
+# restarting the controller).
+config:
+  # Minutes a node must remain NotReady before the out-of-service taint is applied.
+  unhealthyDelayMinutes: "5"
+  # Minutes a node must remain Ready after being tainted before the taint is removed.
+  recoveryDelayMinutes: "10"
+  # Stop applying taints when this percentage of watched nodes is NotReady.
+  # Set to "100" to disable the circuit-breaker.
+  maxUnhealthyPercentage: "33"
+  # Optional label selector to restrict which nodes are watched.
+  # Leave empty to watch all nodes.  Example: "taint-controller=enabled"
+  nodeLabelSelector: ""
+
+# Controller binary flags.
+controller:
+  metricsBindAddress: ":8080"
+  healthProbeBindAddress: ":8081"
+  leaderElect: true
+
+# CPU/memory resource requests and limits for the controller container.
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Liveness probe configuration for the controller container.
+livenessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 20
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+# Readiness probe configuration for the controller container.
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+# Prometheus ServiceMonitor configuration. Requires the Prometheus Operator
+# to be installed in the cluster.
+serviceMonitor:
+  # Set to true to create a ServiceMonitor resource for Prometheus scraping.
+  enabled: false
+  # Interval at which Prometheus should scrape the metrics endpoint.
+  interval: 30s
+  # Scrape timeout. Must be less than or equal to interval.
+  scrapeTimeout: 10s
+  # Additional labels to add to the ServiceMonitor (e.g., to match a
+  # Prometheus Operator release selector).
+  # Example: release: prometheus
+  additionalLabels: {}

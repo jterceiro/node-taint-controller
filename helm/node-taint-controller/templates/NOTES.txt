@@ -1,0 +1,16 @@
+Thank you for installing {{ .Chart.Name }} v{{ .Chart.AppVersion }}!
+
+The node-taint-controller is now deploying in the {{ include "node-taint-controller.namespace" . }} namespace.
+
+To check the controller status:
+
+  kubectl -n {{ include "node-taint-controller.namespace" . }} get deploy {{ include "node-taint-controller.fullname" . }}
+  kubectl -n {{ include "node-taint-controller.namespace" . }} logs -l app.kubernetes.io/name={{ include "node-taint-controller.name" . }}
+
+Prometheus metrics are available at:
+
+  kubectl -n {{ include "node-taint-controller.namespace" . }} port-forward deploy/{{ include "node-taint-controller.fullname" . }} 8080:8080
+  # then open http://localhost:8080/metrics
+
+Configuration is stored in ConfigMap "{{ include "node-taint-controller.fullname" . }}-config" and is
+reloaded on every reconcile loop – no restart required for config changes.

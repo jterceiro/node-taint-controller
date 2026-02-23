@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-taint-controller
+  labels:
+    app.kubernetes.io/name: node-taint-controller
+    app.kubernetes.io/component: controller
+rules:
+  # Watch and patch nodes (taints live in spec; annotations in metadata).
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch", "patch", "update"]
+  # Read the controller ConfigMap.
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+  # Leader election requires leases.
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "create", "update", "patch", "delete"]
+  # Allow the controller to emit events.
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]

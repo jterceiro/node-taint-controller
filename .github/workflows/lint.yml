@@ -1,0 +1,28 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+
+jobs:
+  golangci-lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      # Use v9 + default (golangci-lint v2) so the linter is built with Go 1.25+ and
+      # can run on projects with go 1.25 in go.mod (e.g. after bumping k8s deps to 0.35.x).
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v9

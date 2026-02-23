@@ -1,0 +1,40 @@
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - gocritic
+    - gosec
+    - govet
+    - revive
+    - staticcheck
+    - unused
+  settings:
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+    revive:
+      rules:
+        - name: exported
+        - name: var-naming
+        - name: indent-error-flow
+        - name: error-return
+    gosec:
+      excludes:
+        - G601 # Implicit memory aliasing in for loop (fixed in Go 1.22+)
+  exclusions:
+    rules:
+      - path: _test\.go
+        linters:
+          - gocritic
+        text: "Magic number"
+      - path: _test\.go
+        linters:
+          - gosec
+        text: "G[0-9]+"

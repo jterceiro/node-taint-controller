@@ -1,0 +1,11 @@
+# CODEOWNERS
+#
+# Each line is a file pattern followed by one or more owners.
+# Order matters: the last matching rule takes precedence.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for all files in the repository
+* @jterceiro
+
+# Helm chart changes always require a review from the maintainer
+/helm/ @jterceiro
